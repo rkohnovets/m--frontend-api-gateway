@@ -1,48 +1,46 @@
 import { useEffect, useState } from "react";
-import { api_https } from "../../config.ts";
-import type { UserInfo } from "../../Auth/AuthContext.tsx";
+import { backend_api_https } from "../../config.ts";
 import { useAuth } from "../../Auth/AuthContext.tsx";
+import type { UserChats } from "../../Types/ChatTypes.tsx";
+import ChatButton from "../UI/ChatButton/ChatButton.tsx";
 
-const ProtectedPage = () => {
-    const { user } = useAuth()
-    if(!user)
+const ChatsListPage = () => {
+    const { jwt } = useAuth()
+    const [ userChats, setUserChats ] = useState<UserChats | null>(null);
+    if(!jwt)
         return (<p>You are not authenticated</p>)
 
-    interface UserInfoResponse {
-        user: UserInfo
+    const loadUserChats = async () => {
+        let response = await fetch(backend_api_https + '/chats/', {
+            method: 'GET',
+            mode: 'cors',
+            headers: { "Authorization": jwt }
+        })
+
+        if(response.ok) {
+            const responseBody : UserChats = await response.json()
+            setUserChats(responseBody)
+        } else {
+            let text = await response.text()
+            alert("Code " + response.status + ", message: " + text)
+        }
     }
 
-    const [ userInfo, setUserInfo ] = useState<UserInfo | null>(null);
-
     useEffect(() => {
-        // declare the async data fetching function
-        const fetchData = async () => {
-            let response = await fetch(api_https + '/auth/userinfo', {
-                method: 'GET',
-                mode: 'cors',
-                headers: {
-                    "Authorization": `Bearer ${user.jwt}`
-                }
-            })
-
-            if(response.ok) {
-                const uir : UserInfoResponse = await response.json()
-                setUserInfo(uir.user)
-            } else {
-                let text = await response.text()
-                alert("Code " + response.status + ", message: " + text)
-            }
-        }
-
-        // call the function
-        fetchData()
+        loadUserChats()
             // make sure to catch any error
             .catch(console.error)
     }, [])
 
-    return <div>
-        <p>User info: { userInfo ? JSON.stringify(userInfo) : "loading..." }</p>
-    </div>;
+    if(!userChats)
+        return (<p>Loading...</p>)
+
+    return (
+        <div className="max-w-3xl mx-auto">
+            <ChatButton {...userChats.notes}/>
+            { userChats.other.map(chat => <ChatButton {...chat}/>)}
+        </div>
+    )
 }
 
-export default ProtectedPage;
+export default ChatsListPage;

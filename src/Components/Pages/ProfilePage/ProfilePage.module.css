@@ -1,0 +1,14 @@
+.profileInfoContainer {
+    //height: 90vh;
+    display: grid;
+    grid-template-rows: 80px 80px 1fr;
+    grid-template-columns: 160px 1fr;
+}
+
+.image {
+    grid-row: 1 / 3;
+}
+
+.aboutDiv{
+    grid-column: 1 / 3;
+}

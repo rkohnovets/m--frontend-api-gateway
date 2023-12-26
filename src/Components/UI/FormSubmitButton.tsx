@@ -1,4 +1,4 @@
-import {Loader} from "./Loader.tsx";
+import { Loader } from "./Loader.tsx";
 
 type FormSubmitButtonProps = {
     text: string,

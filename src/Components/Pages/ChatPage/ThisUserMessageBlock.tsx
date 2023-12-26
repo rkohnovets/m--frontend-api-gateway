@@ -1,0 +1,12 @@
+import type { Message } from '../../../Types/ChatTypes.tsx'
+
+const ThisUserMessageBlock = (message: Message) => {
+    return (
+        <div className='px-2 py-1 m-2 ml-auto bg-blue-400 p-1 rounded-lg w-fit max-w-2xl'>
+            <p className='text-left'>
+                {message.text}
+            </p>
+        </div>
+    )
+}
+export default ThisUserMessageBlock

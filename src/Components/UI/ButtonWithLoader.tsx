@@ -4,7 +4,7 @@ import React, { useState } from "react";
 type ButtonWithLoaderProps = {
     text: string,
     loadingText: string,
-    onClick: () => void, // VoidFunction
+    onClick: () => Promise<void> // async func
     textTailwind?: string,
     bgTailwind?: string
 }
@@ -17,7 +17,7 @@ const ButtonWithLoader = (props: ButtonWithLoaderProps) => {
         const button = e.target as HTMLButtonElement
         button.disabled = true;
 
-        props.onClick();
+        await props.onClick();
 
         setIsLoading(false); 
         button.disabled = false;
@@ -34,7 +34,6 @@ const ButtonWithLoader = (props: ButtonWithLoaderProps) => {
 
     return (
         <button type="button" className={buttonStyle} onClick={handleOnClick}>
-
             {isLoading
             ? <><p className="block">{props.loadingText}</p><Loader/></>
             : <>{props.text}</>}

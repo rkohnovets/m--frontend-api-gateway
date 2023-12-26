@@ -16,11 +16,11 @@ import { useAuth } from "./AuthContext.tsx";
 
 */
 
-export function RequireAuth({ children }: { children: JSX.Element }) {
-    let auth = useAuth();
+const RequireAuth = ({ children } : { children: JSX.Element }) => {
+    let { jwt } = useAuth();
     let location = useLocation();
 
-    if (!auth.user) {
+    if (!jwt) {
         // Redirect them to the /login page, but save the current location they were
         // trying to go to when they were redirected. This allows us to send them
         // along to that page after they login, which is a nicer user experience
@@ -30,3 +30,5 @@ export function RequireAuth({ children }: { children: JSX.Element }) {
 
     return children;
 }
+
+export default RequireAuth
