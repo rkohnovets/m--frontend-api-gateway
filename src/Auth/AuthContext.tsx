@@ -107,7 +107,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     
     let signIn = async (user: RegisterOrLoginInfo, callback: VoidFunction) => {
-        let response = await fetch(auth_api_https + '/auth/login', {
+        //let response = await fetch(auth_api_https + '/auth/login', {
+        let response = await fetch('api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             mode: 'cors',
@@ -170,8 +171,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     const [ silentLoading, setSilentLoading ] = useState<boolean>(true)
     useEffect(() => {
         let jwtstr = localStorage.getItem('jwt')
-        if(!jwtstr)
+        if(!jwtstr) {
+            setSilentLoading(false)
             return
+        }
 
         setSilentLoading(true)
         refreshJWT(jwtstr)
