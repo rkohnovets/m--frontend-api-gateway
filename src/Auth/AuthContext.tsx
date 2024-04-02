@@ -107,8 +107,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     
     let signIn = async (user: RegisterOrLoginInfo, callback: VoidFunction) => {
-        //let response = await fetch(auth_api_https + '/auth/login', {
-        let response = await fetch('api/auth/login', {
+        let response = await fetch(auth_api_https + '/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             mode: 'cors',
