@@ -170,8 +170,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     const [ silentLoading, setSilentLoading ] = useState<boolean>(true)
     useEffect(() => {
         let jwtstr = localStorage.getItem('jwt')
-        if(!jwtstr)
+        if(!jwtstr) {
+            setSilentLoading(false)
             return
+        }
 
         setSilentLoading(true)
         refreshJWT(jwtstr)

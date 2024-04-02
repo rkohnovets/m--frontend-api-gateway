@@ -1,0 +1,102 @@
+# service for backend microservice
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 4000
+  selector:
+    app: backend
+
+---
+
+# pod for backend microservice
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend-pod
+  labels:
+    app: backend
+spec:
+  containers:
+  - name: backend-cnr
+    image: rkohnovets/simple-backend
+    ports:
+    - containerPort: 4000
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "200m"
+
+---
+
+# service for auth microservice
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-svc
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 5000
+  selector:
+    app: auth
+
+---
+
+# pod for auth microservice
+apiVersion: v1
+kind: Pod
+metadata:
+  name: auth-pod
+  labels:
+    app: auth
+spec:
+  containers:
+  - name: auth-cnr
+    image: rkohnovets/simple-auth-server
+    ports:
+    - containerPort: 5000
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "200m"
+
+---
+
+# service for frontend and api gateway microservice
+apiVersion: v1
+kind: Service
+metadata:
+  name: front-svc
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: front
+
+---
+
+# pod for frontend and api gateway microservice
+apiVersion: v1
+kind: Pod
+metadata:
+  name: front-pod
+  labels:
+    app: front
+spec:
+  containers:
+  - name: front-cnr
+    image: rkohnovets/simple-frontend
+    ports:
+    - containerPort: 80
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "200m"
